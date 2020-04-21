@@ -3,6 +3,8 @@
 return [
     'app' => [
         'domains' => 'Domains',
-        'add' => 'Add'
+        'add' => 'Add',
+        'check' => 'Check',
+        'site' => 'Site'
     ]
 ];
