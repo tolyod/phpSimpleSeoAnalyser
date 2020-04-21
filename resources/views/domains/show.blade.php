@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1 class="mb-5">{{ $domain->name }}</h1>
-    <table class="table">
+    <div class="container-lg">
+    <h1 class="mt-5 mb-3">{{__('layouts.app.site')}}: {{ $domain->name }}</h1>
+    <div class="table-responsive">
+    <table class="table table-bordered table-hover text-nowrap">
         <tr>
             <td>id</td>
             <td>{{ $domain->id }}</td>
@@ -20,5 +22,7 @@
             <td>{{ $domain->updated_at }}</td>
         </tr>
     </table>
+    </div>
+    </div>
 @endsection
 

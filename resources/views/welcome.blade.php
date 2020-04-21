@@ -1,20 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="jumbotron">
-        <h1 class="display-3">Page Analyzer</h1>
-        <p class="lead">Check web pages for free</p>
-        {{ App::environment() }}
-        {{ dump(json_encode($_ENV)) }}
-        <hr class="my-4">
-        {{ Form::open(
-                ['action' => 'DomainController@store',
-                'class' => 'd-flex justify-content-center form-inline']
-            ) }}
-            @csrf
-            @include('domains.form')
-            {{ Form::submit(__('layouts.app.add'), ['class' => 'btn btn-lg btn-primary ml-3']) }}
-        {{ Form::close() }}
+    <div class="jumbotron jumbotron-fluid bg-dark">
+        <div class="container-lg">
+            <div class="row">
+                <div class="col-12 col-md-10 col-lg-8 mx-auto text-white">
+                    <h1 class="display-3">Page Analyzer</h1>
+                    <p class="lead">Check web pages for free</p>
+                        {{ Form::open(
+                          ['action' => 'DomainController@store',
+                          'class' => 'd-flex justify-content-center']
+                        ) }}
+                            @csrf
+                            @include('domains.form')
+                            {{ Form::button(__('layouts.app.check'), [
+                                'type'=>'submit',
+                                'class' => 'btn btn-lg btn-primary ml-3 px-5 text-uppercase']
+                            ) }}
+                        {{ Form::close() }}
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
