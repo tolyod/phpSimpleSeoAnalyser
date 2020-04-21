@@ -4,6 +4,8 @@
     <div class="jumbotron">
         <h1 class="display-3">Page Analyzer</h1>
         <p class="lead">Check web pages for free</p>
+        {{ App::environment() }}
+        {{ dump(json_encode($_ENV)) }}
         <hr class="my-4">
         {{ Form::open(
                 ['action' => 'DomainController@store',
