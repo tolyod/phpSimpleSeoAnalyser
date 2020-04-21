@@ -52,12 +52,11 @@ class DomainController extends Controller
         ]);
 
         if ($uniqueDomain->fails()) {
-
             $name = $request->input('name');
             $id = DB::table('domains')
                 ->where('name', $name)
                 ->value('id');
-            flash($uniqueDomain->errors()->first('name'))->error();
+            flash($uniqueDomain->errors()->first('name'))->info();
             return redirect()->route('domains.show', $id);
         }
 
