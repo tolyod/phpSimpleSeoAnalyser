@@ -18,3 +18,5 @@ Route::get('/', function () {
 });
 
 Route::resource('domains', 'DomainController');
+Route::get('domains/{domain}/check', ['as' => 'domains.check','uses' => 'DomainController@check']);
+Route::post('domains/{domain}/check', ['as' => 'domains.check','uses' => 'DomainController@check']);

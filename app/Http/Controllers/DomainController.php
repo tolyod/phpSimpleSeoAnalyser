@@ -114,6 +114,11 @@ class DomainController extends Controller
         //
     }
 
+    public function check(Request $request, $id)
+    {
+        //
+    }
+
     /**
      * Remove the specified resource from storage.
      *
