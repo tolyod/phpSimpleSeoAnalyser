@@ -21,47 +21,47 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ],
             [
-                'name' => "https://www.". $faker->domainName,
+                'name' => "https://www." . $faker->domainName,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ]

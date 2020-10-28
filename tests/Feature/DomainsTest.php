@@ -11,6 +11,7 @@ use Tests\TestCase;
 class DomainsTest extends TestCase
 {
     use RefreshDatabase;
+
     protected $faker;
 
     public function setUp(): void
