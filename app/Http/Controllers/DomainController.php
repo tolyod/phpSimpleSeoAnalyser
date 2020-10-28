@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DiDom\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -125,12 +126,24 @@ class DomainController extends Controller
         try {
             $data = Http::get($domain->name);
             $status = $data->status();
+            $body = $data->body();
+            $document = new Document($body);
+            $h1 = $document->has('h1') ? $document->first('h1')->text() : null;
+            $keywordsElement = $document->first('meta[name=keywords]');
+            $keywords = optional($keywordsElement)->getAttribute('content');
+            $descriptionElement = $document->first('meta[name=description]');
+            $description = optional($descriptionElement)->getAttribute('content');
+            $currentDate = Carbon::now()->toDateTimeString();
+
             DB::table('domain_checks')->insert(
                 [
                     'domain_id' => $id,
                     'status_code' => $status,
-                    'created_at' => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString()
+                    'h1' => $h1,
+                    'keywords' => $keywords,
+                    'description' => $description,
+                    'created_at' => $currentDate,
+                    'updated_at' => $currentDate
                 ]
             );
         } catch (HttpException $err) {

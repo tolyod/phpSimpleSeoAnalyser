@@ -36,15 +36,21 @@
            <div class="table-responsive">
             <table class="table table-bordered table-hover text-nowrap">
                     <tr>
-                        <td>check id</td>
-                        <td>status code</td>
-                        <td>check date</td>
+                        <th>check id</th>
+                        <th>status code</th>
+                        <th>H1</th>
+                        <th>Keywords</th>
+                        <th>Description</th>
+                        <th>check date</th>
                     </tr>
                 @foreach ($domain_checks as $check)
                     <tr>
-                        <td>{{  $check->id }}</td>
-                        <td>{{  $check->status_code }}</td>
-                        <td>{{  $check->created_at }}</td>
+                        <td>{{ $check->id }}</td>
+                        <td>{{ $check->status_code }}</td>
+                        <td>{{ Str::of($check->h1)->limit(33) }}</td>
+                        <td>{{ Str::of($check->keywords)->limit(33) }}</td>
+                        <td>{{ Str::of($check->description)->limit(33) }}</td>
+                        <td>{{ $check->created_at }}</td>
                     </tr>
                 @endforeach
             </table>
