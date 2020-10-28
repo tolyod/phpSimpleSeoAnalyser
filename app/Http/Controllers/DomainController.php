@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
@@ -88,7 +89,11 @@ class DomainController extends Controller
     public function show($id)
     {
         $domain = DB::table('domains')->where('id', $id)->first();
-        return view('domains.show', compact('domain'));
+        $domain_checks = DB::table('domain_checks')
+            ->where('domain_id', '=', $id)
+            ->paginate(10);
+
+        return view('domains.show', compact('domain', 'domain_checks'));
     }
 
     /**
@@ -114,9 +119,28 @@ class DomainController extends Controller
         //
     }
 
-    public function check(Request $request, $id)
+    public function check($id)
     {
-        //
+        $domain = DB::table('domains')->find($id);
+        try {
+            $data = Http::get($domain->name);
+            $status = $data->status();
+            DB::table('domain_checks')->insert(
+                [
+                    'domain_id' => $id,
+                    'status_code' => $status,
+                    'created_at' => Carbon::now()->toDateTimeString(),
+                    'updated_at' => Carbon::now()->toDateTimeString()
+                ]
+            );
+        } catch (HttpException $err) {
+            flash($err->getMessage())->error();
+        } catch (Throwable $e) {
+            abort(404);
+        }
+        flash('Site ' . $domain->name . ' cheked')->success();
+        return redirect()
+            ->route('domains.show', $id);
     }
 
     /**

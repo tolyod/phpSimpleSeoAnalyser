@@ -35,27 +35,19 @@
          {{ Form::close() }}
            <div class="table-responsive">
             <table class="table table-bordered table-hover text-nowrap">
-                                    <tr>
-                        <td>200</td>
-                        <td>2020-03-30 19:53:43</td>
+                    <tr>
+                        <td>check id</td>
+                        <td>status code</td>
+                        <td>check date</td>
                     </tr>
-                                    <tr>
-                        <td>200</td>
-                        <td>2020-04-05 21:40:43</td>
+                @foreach ($domain_checks as $check)
+                    <tr>
+                        <td>{{  $check->id }}</td>
+                        <td>{{  $check->status_code }}</td>
+                        <td>{{  $check->created_at }}</td>
                     </tr>
-                                    <tr>
-                        <td>200</td>
-                        <td>2020-04-21 00:49:17</td>
-                    </tr>
-                                    <tr>
-                        <td>200</td>
-                        <td>2020-05-03 02:40:45</td>
-                    </tr>
-                                    <tr>
-                        <td>200</td>
-                        <td>2020-05-03 02:40:48</td>
-                    </tr>
-                            </table>
+                @endforeach
+            </table>
             </div>
 @endsection
 
