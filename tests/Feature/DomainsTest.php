@@ -47,7 +47,7 @@ class DomainsTest extends TestCase
     {
         $data = ['name' => $invalidDomainName];
         $response = $this->post(route('domains.store'), $data);
-        $response->assertSessionHasNoErrors();
+        $response->assertSessionHasErrors();
         $response->assertRedirect();
 
         $this->assertDatabaseMissing('domains', $data);
