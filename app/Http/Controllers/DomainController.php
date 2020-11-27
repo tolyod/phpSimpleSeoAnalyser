@@ -23,16 +23,6 @@ class DomainController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -40,45 +30,29 @@ class DomainController extends Controller
      */
     public function store(Request $request)
     {
-        $urlValidated =  Validator::make($request->all(), [
-            'name' => 'required|active_url'
+        ['name' => $domainName] = $request->validate([
+            'name' => 'required|active_url|max:255'
         ]);
 
-        if ($urlValidated->fails()) {
-            flash($urlValidated->errors()->first('name'))->error();
-            return redirect('/');
-        }
-
-        $uniqueDomain = Validator::make($request->all(), [
-            'name' => 'required|unique:domains|max:255'
+        $uniqueDomain = Validator::make(['name' => $domainName], [
+            'name' => 'unique:domains'
         ]);
 
         if ($uniqueDomain->fails()) {
-            $name = $request->input('name');
             $id = DB::table('domains')
-                ->where('name', $name)
+                ->where('name', $domainName)
                 ->value('id');
             flash($uniqueDomain->errors()->first('name'))->info();
             return redirect()->route('domains.show', $id);
         }
 
-        $nameValidate = Validator::make($request->all(), [
-            'name' => 'required|max:255'
+        $id = DB::table('domains')->insertGetId([
+                'name' => $domainName,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
         ]);
-
-        if ($nameValidate->passes()) {
-            $name = $request->input('name');
-            $id = DB::table('domains')->insertGetId(
-                [
-                    'name' => $name,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]
-            );
-            flash('Url has been added')->success();
-            return redirect()
-                ->route('domains.show', $id);
-        }
+        flash('domain ' . $domainName . ' has been added')->success();
+        return redirect()->route('domains.show', $id);
     }
 
     /**
@@ -97,34 +71,9 @@ class DomainController extends Controller
         return view('domains.show', compact('domain', 'domain_checks'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function buildDomainCheckData($name, $id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function check($id)
-    {
-        $domain = DB::table('domains')->find($id);
-        try {
-            $data = Http::get($domain->name);
+            $data = Http::get($name);
             $status = $data->status();
             $body = $data->body();
             $document = new Document($body);
@@ -134,9 +83,7 @@ class DomainController extends Controller
             $descriptionElement = $document->first('meta[name=description]');
             $description = optional($descriptionElement)->getAttribute('content');
             $currentDate = Carbon::now()->toDateTimeString();
-
-            DB::table('domain_checks')->insert(
-                [
+            return [
                     'domain_id' => $id,
                     'status_code' => $status,
                     'h1' => $h1,
@@ -144,26 +91,22 @@ class DomainController extends Controller
                     'description' => $description,
                     'created_at' => $currentDate,
                     'updated_at' => $currentDate
-                ]
-            );
+            ];
+    }
+
+    public function check($id)
+    {
+        $domain = DB::table('domains')->find($id);
+        try {
+            $domainData = $this->buildDomainCheckData($domain->name, $id);
+            DB::table('domain_checks')->insert($domainData);
         } catch (HttpException $err) {
             flash($err->getMessage())->error();
         } catch (Throwable $e) {
             abort(404);
         }
-        flash('Site ' . $domain->name . ' cheked')->success();
+        flash('Site ' . $domain->name . ' checked')->success();
         return redirect()
             ->route('domains.show', $id);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
