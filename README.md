@@ -12,4 +12,4 @@
 
 [demo heroku link](https://shrouded-sea-20040.herokuapp.com/)
 
-![brain-even](https://tolyod.github.io/images/seo_analyzer.gif)
+![yet another seo analyther](https://tolyod.github.io/images/seo_analyzer.gif)
