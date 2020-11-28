@@ -12,4 +12,4 @@
 
 [demo heroku link](https://shrouded-sea-20040.herokuapp.com/)
 
-![brain-even](https://tolyod.github.io/images/brain-even.gif =450x250)
+![brain-even](https://tolyod.github.io/images/brain-even.gif)
