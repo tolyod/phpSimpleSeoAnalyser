@@ -27,6 +27,15 @@ class DomainsTest extends TestCase
         $response->assertOk();
     }
 
+    public function testShow()
+    {
+        $id = $this->faker->randomDigitNot(0);
+        $responce = $this->get(route('domains.show', $id));
+        $responce->assertOk();
+
+        $this->assertDatabaseHas('domains', ['id' => $id]);
+    }
+
     /**
     * @dataProvider domainNamesProvider
     */
