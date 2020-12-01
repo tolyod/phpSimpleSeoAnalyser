@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "Yet Another SEO Page Analyzer",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "example of how php and Laravel framework can analyze pages on the Internet.",
     "keywords": [
         "framework",
         "laravel"
