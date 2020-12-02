@@ -8,11 +8,14 @@
                     <h1 class="display-3">Page Analyzer</h1>
                     <p class="lead">Check web pages for free</p>
                         {{ Form::open(
-                          ['action' => 'DomainController@store',
+                          ['url' => route('domains.store'),
                           'class' => 'd-flex justify-content-center']
                         ) }}
                             @csrf
-                            @include('domains.form')
+                            {{ Form::text('name', '', [
+                                'class' => 'form-control form-control-lg',
+                                'placeholder' => 'https://www.example.com
+                            ']) }}<br>
                             {{ Form::button(__('layouts.app.check'), [
                                 'type'=>'submit',
                                 'class' => 'btn btn-lg btn-primary ml-3 px-5 text-uppercase']
