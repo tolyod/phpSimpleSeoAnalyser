@@ -8,14 +8,16 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Status Code</th>
+                    <th>Last check</th>
+                    <th>Status code</th>
                 </tr>
 
     @foreach ($domains as $domain)
                <tr>
                    <td>{{ $domain->id }}</td>
                    <td><a href="{{ route('domains.show', $domain->id) }}">{{ $domain->name }}</a></td>
-                   <td>200</td>
+                   <td>{{ $domain->last_check ?? null }}</td>
+                   <td>{{ $domain->status_code ?? null }}</td>
                </tr>
     @endforeach
             </table>
