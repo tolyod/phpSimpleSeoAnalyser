@@ -3,10 +3,12 @@
 namespace Tests\Feature;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DomainsChecksTest extends TestCase
 {
+    use RefreshDatabase;
 
     public function setUp(): void
     {
