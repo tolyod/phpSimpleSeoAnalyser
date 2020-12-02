@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::resource('domains', 'DomainController');
-Route::get('domains/{domain}/check', ['as' => 'domains.check','uses' => 'DomainController@check']);
-Route::post('domains/{domain}/check', ['as' => 'domains.check','uses' => 'DomainController@check']);
+Route::resource('domains.checks', 'DomainCheckController')->only('store');
