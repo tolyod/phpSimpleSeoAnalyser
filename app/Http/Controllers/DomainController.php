@@ -20,10 +20,14 @@ class DomainController extends Controller
     {
         $domains = DB::table('domains')
             ->leftJoin('domain_checks', 'domains.id', '=', 'domain_checks.domain_id')
-            ->groupBy('name')
-            ->orderBy('domain_checks.updated_at')
-            ->select('domains.id', 'name', 'status_code', DB::raw('max(domain_checks.updated_at) as last_check'))
-            ->get();
+            ->groupBy(['name', 'domains.id', 'status_code'])
+            ->orderByRaw('max(domain_checks.updated_at)')
+            ->select(
+                'domains.id',
+                'name',
+                'status_code',
+                DB::raw('max(domain_checks.updated_at) as last_check')
+            )->get();
         return view('domains.index', compact('domains'));
     }
 
