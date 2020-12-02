@@ -3,9 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class DomainsTest extends TestCase
@@ -29,7 +26,7 @@ class DomainsTest extends TestCase
 
     public function testShow()
     {
-        $id = $this->faker->randomDigitNot(0);
+        $id = $this->faker->numberBetween(1, 3);
         $responce = $this->get(route('domains.show', $id));
         $responce->assertOk();
 
@@ -62,25 +59,13 @@ class DomainsTest extends TestCase
         $this->assertDatabaseMissing('domains', $data);
     }
 
-    public function testDomainCheckStatus()
-    {
-        $name = "https://www.google.ru/";
-        Http::fake([
-            $name => Http::response('<html>fake site</html>', 203)
-        ]);
-        $response = $this->post(route('domains.check', 1));
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
-        $this->assertDatabaseHas('domain_checks', ['status_code' => '203']);
-    }
-
     public function domainNamesProvider()
     {
         return [
             ['http://rambler.ru'],
             ['https://google.com'],
             ['https://ya.ru']
-        ] ;
+        ];
     }
 
     public function invalidDomainNamesProvider()
@@ -89,6 +74,6 @@ class DomainsTest extends TestCase
             ['ramblerru'],
             ['googlecom'],
             ['yaru']
-        ] ;
+        ];
     }
 }

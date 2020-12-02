@@ -18,7 +18,12 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $domains = DB::table('domains')->select(['id', 'name'])->get();
+        $domains = DB::table('domains')
+            ->leftJoin('domain_checks', 'domains.id', '=', 'domain_checks.domain_id')
+            ->groupBy('name')
+            ->orderBy('domain_checks.updated_at')
+            ->select('domains.id', 'name', 'status_code', DB::raw('max(domain_checks.updated_at) as last_check'))
+            ->get();
         return view('domains.index', compact('domains'));
     }
 
@@ -51,7 +56,9 @@ class DomainController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
         ]);
-        flash('domain ' . $domainName . ' has been added')->success();
+        flash(
+            __('flashes.domain.added', ['name' => $domainName])
+        )->success();
         return redirect()->route('domains.show', $id);
     }
 
@@ -69,44 +76,5 @@ class DomainController extends Controller
             ->paginate(10);
 
         return view('domains.show', compact('domain', 'domain_checks'));
-    }
-
-    public function buildDomainCheckData($name, $id)
-    {
-            $data = Http::get($name);
-            $status = $data->status();
-            $body = $data->body();
-            $document = new Document($body);
-            $h1 = $document->has('h1') ? $document->first('h1')->text() : null;
-            $keywordsElement = $document->first('meta[name=keywords]');
-            $keywords = optional($keywordsElement)->getAttribute('content');
-            $descriptionElement = $document->first('meta[name=description]');
-            $description = optional($descriptionElement)->getAttribute('content');
-            $currentDate = Carbon::now()->toDateTimeString();
-            return [
-                    'domain_id' => $id,
-                    'status_code' => $status,
-                    'h1' => $h1,
-                    'keywords' => $keywords,
-                    'description' => $description,
-                    'created_at' => $currentDate,
-                    'updated_at' => $currentDate
-            ];
-    }
-
-    public function check($id)
-    {
-        $domain = DB::table('domains')->find($id);
-        try {
-            $domainData = $this->buildDomainCheckData($domain->name, $id);
-            DB::table('domain_checks')->insert($domainData);
-        } catch (HttpException $err) {
-            flash($err->getMessage())->error();
-        } catch (Throwable $e) {
-            abort(404);
-        }
-        flash('Site ' . $domain->name . ' checked')->success();
-        return redirect()
-            ->route('domains.show', $id);
     }
 }
