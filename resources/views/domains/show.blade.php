@@ -25,7 +25,7 @@
         </div>
         <h2 class="mt-5 mb-3">Checks</h2>
          {{ Form::open(
-           ['action' => ['DomainController@check', $domain->id]]
+             ['url' => route('domains.checks.store', $domain->id)]
          ) }}
              @csrf
              {{ Form::button(__('layouts.app.run_check'), [
