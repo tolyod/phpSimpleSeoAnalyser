@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use DiDom\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
@@ -18,17 +16,13 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $domains = DB::table('domains')
-            ->leftJoin('domain_checks', 'domains.id', '=', 'domain_checks.domain_id')
-            ->groupBy(['name', 'domains.id', 'status_code'])
-            ->orderByRaw('max(domain_checks.updated_at)')
-            ->select(
-                'domains.id',
-                'name',
-                'status_code',
-                DB::raw('max(domain_checks.updated_at) as last_check')
-            )->get();
-        return view('domains.index', compact('domains'));
+        $domains = DB::table('domains')->select(['id', 'name'])->paginate();
+        $lastDomainChecks = DB::table('domain_checks')
+                    ->select('domain_id', 'status_code', DB::raw('MAX(domain_checks.updated_at) as last_check'))
+                    ->groupBy('domain_id', 'status_code')
+                    ->get()
+                    ->keyBy('domain_id');
+        return view('domains.index', compact('domains', 'lastDomainChecks'));
     }
 
     /**
@@ -75,6 +69,9 @@ class DomainController extends Controller
     public function show($id)
     {
         $domain = DB::table('domains')->where('id', $id)->first();
+        if (!$domain) {
+            abort('404');
+        }
         $domain_checks = DB::table('domain_checks')
             ->where('domain_id', '=', $id)
             ->paginate(10);

@@ -16,11 +16,12 @@
                <tr>
                    <td>{{ $domain->id }}</td>
                    <td><a href="{{ route('domains.show', $domain->id) }}">{{ $domain->name }}</a></td>
-                   <td>{{ $domain->last_check ?? null }}</td>
-                   <td>{{ $domain->status_code ?? null }}</td>
+                   <td>{{ data_get($lastDomainChecks, $domain->id . '.last_check', null) }}</td>
+                   <td>{{ data_get($lastDomainChecks, $domain->id . '.status_code', null) }}</td>
                </tr>
     @endforeach
             </table>
+            <div>{{ $domains->links() }}</div>
         </div>
     </div>
 @endsection
