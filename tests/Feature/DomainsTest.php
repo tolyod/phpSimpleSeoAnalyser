@@ -2,13 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Support\Facades\DB;
 
 class DomainsTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected $faker;
 
     public function setUp(): void
@@ -27,10 +25,10 @@ class DomainsTest extends TestCase
     public function testShow()
     {
         $id = $this->faker->numberBetween(1, 3);
+        $domain = DB::table('domains')->find($id)->name;
         $responce = $this->get(route('domains.show', $id));
         $responce->assertOk();
-
-        $this->assertDatabaseHas('domains', ['id' => $id]);
+        $responce->assertSee($domain);
     }
 
     /**
