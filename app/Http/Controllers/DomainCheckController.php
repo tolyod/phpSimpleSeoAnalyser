@@ -50,10 +50,8 @@ class DomainCheckController extends Controller
             flash(
                 __('flashes.domain.checked', ['name' => $domain->name])
             )->success();
-        } catch (ConnectionException $cathedConnectionException) {
-            flash($cathedConnectionException->getMessage())->error();
-        } catch (RequestException $catchedRequestException) {
-            flash($catchedRequestException->getMessage())->error();
+        } catch (ConnectionException | RequestException $cathedException) {
+            flash($cathedException->getMessage())->error();
         }
         return redirect()
             ->route('domains.show', $id);
